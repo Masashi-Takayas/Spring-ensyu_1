@@ -1,17 +1,10 @@
 package jp.co.example.controller.form;
 
-public class IndexForm {
-
-    private String userName;
+/**
+ * トップ画面用フォーム
+ */
+public class ProductForm {
     private Integer productId;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public Integer getProductId() {
         return productId;
