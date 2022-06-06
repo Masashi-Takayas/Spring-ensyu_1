@@ -1,10 +1,19 @@
-package jp.co.example.controller.form;
+package com.example.controller.form;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * トップ画面用フォーム
  */
 public class ProductForm {
     private Integer productId;
+
+    @NotBlank
+    private String productName;
+
+    @NotNull
+    private Integer price;
 
     public Integer getProductId() {
         return productId;
@@ -14,5 +23,20 @@ public class ProductForm {
         this.productId = productId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setPrice(Integer _price) {
+        this.price = _price;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
 }
 

@@ -1,13 +1,13 @@
-package com.example.service;
+package com.example.dao;
 
 import java.util.List;
 
 import com.example.entity.Product;
 
 /**
- * productsテーブル用サービスインターフェース
+ * productsテーブル用DAO (インターフェース)
  */
-public interface ProductService {
+public interface ProductDao {
     public List<Product> findAll();
 
     public List<Product> find(Product product);

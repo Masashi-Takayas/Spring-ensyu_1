@@ -1,4 +1,4 @@
-package jp.co.example.util;
+package com.example.util;
 
 /**
  * Utilityメソッドをまとめたクラス
