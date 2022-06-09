@@ -6,37 +6,39 @@ import javax.validation.constraints.NotNull;
 /**
  * トップ画面用フォーム
  */
-public class ProductForm {
-    private Integer productId;
+public class RankingForm {
+    
+	@NotNull
+	private Integer id;
 
     @NotBlank
-    private String productName;
+    private String name;
 
     @NotNull
-    private Integer price;
+    private Integer score;
 
-    public Integer getProductId() {
-        return productId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setPrice(Integer _price) {
-        this.price = _price;
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
-    public Integer getPrice() {
-        return price;
+    public Integer getScore() {
+        return score;
     }
 }
 

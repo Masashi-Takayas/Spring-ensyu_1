@@ -1,6 +1,5 @@
 package com.example.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,80 +8,48 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.dao.ProductDao;
-import com.example.entity.Product;
-import com.example.util.ParamUtil;
+import com.example.dao.RankingDao;
+import com.example.entity.Ranking;
 
-/**
- * productsテーブル用DAO
- */
+
 @Repository
-public class PgProductDao implements ProductDao {
+public class PgRankingDao implements RankingDao {
 
-    private static final String SELECT_ALL = "SELECT * FROM products";
-    private static final String SELECT = "SELECT * FROM products WHERE ";
-    private static final String ORDER_BY = " ORDER BY product_id";
-    private static final String INSERT = "INSERT INTO products (product_name, price) VALUES(:productName, :price)";
+	private static final String SELECT_ALL = "SELECT name,score FROM ranking ORDER BY score DESC";
+	private static final String INSERT = "INSERT INTO ranking(name, score) VALUES(:name, :score)";
+	private static final String DELETE = "DELETE FROM ranking WHERE rank_id = :id";
 
-    @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
+	@Autowired
+	private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Override
-    public List<Product> findAll() {
-        String sql = SELECT_ALL + ORDER_BY;
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Product>(Product.class));
-    }
+	@Override
+	public List<Ranking> findAll(Ranking ranking) {
+		String sql = SELECT_ALL;
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Ranking>(Ranking.class));
+	}
 
-    /**
-     * 条件を指定した検索
-     */
-    @Override
-    public List<Product> find(Product product) {
-        if (product == null || product.isEmptyCondition()) {
-            return findAll();
-        }
+	/**
+	 * 登録
+	 */
+	@Override
+	public void insert(Ranking ranking) {
+		String sql = INSERT;
 
-        List<String> condition = new ArrayList<String>();
-        MapSqlParameterSource param = new MapSqlParameterSource();
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("name", ranking.getName());
+		param.addValue("score", ranking.getScore());
 
-        Integer productId = product.getProductId();
-        String productName = product.getProductName();
-        Integer price = product.getPrice();
+		jdbcTemplate.update(sql, param);
+	}
 
-        if (productId != null) {
-            condition.add("product_id = :productId");
-            param.addValue("productId", productId);
-        }
+	@Override
+	public void delete(Ranking ranking) {
+		String sql = DELETE;
 
-        if (!ParamUtil.isNullOrEmpty(productName)) {
-            condition.add("product_name = :productName");
-            param.addValue("productName", productName);
-        }
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("id", ranking.getId());
 
-        if (price != null) {
-            condition.add("price = :price");
-            param.addValue("price", price);
-        }
-
-        String whereString = String.join(" AND ", condition.toArray(new String[] {}));
-
-        String sql = SELECT + whereString + ORDER_BY;
-
-        return jdbcTemplate.query(sql, param, new BeanPropertyRowMapper<Product>(Product.class));
-    }
-
-    /**
-     * 登録
-     */
-    @Override
-    public void insert(Product product) {
-        String sql = INSERT;
-
-        MapSqlParameterSource param = new MapSqlParameterSource();
-        param.addValue("productName", product.getProductName());
-        param.addValue("price", product.getPrice());
-
-        jdbcTemplate.update(sql, param);
-    }
+		jdbcTemplate.update(sql, param);
+	}
 }
 

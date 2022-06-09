@@ -2,16 +2,16 @@ package com.example.dao;
 
 import java.util.List;
 
-import com.example.entity.Product;
+import com.example.entity.Ranking;
 
 /**
  * productsテーブル用DAO (インターフェース)
  */
-public interface ProductDao {
-    public List<Product> findAll();
+public interface RankingDao {
+    public List<Ranking> findAll(Ranking ranking);
 
-    public List<Product> find(Product product);
-
-    public void insert(Product product);
+    public void insert(Ranking ranking);
+    
+    public void delete(Ranking ranking);
 }
 

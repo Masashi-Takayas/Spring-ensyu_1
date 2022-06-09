@@ -5,53 +5,54 @@ import com.example.util.ParamUtil;
 /**
  * productsテーブルのEntity
  */
-public class Product {
-    private Integer productId;
-    private String productName;
-    private Integer price;
+public class Ranking {
+	private Integer id;
+	private String name;
+	private Integer score;
 
-    public Product() {
+	public Ranking() {
 
-    }
+	}
 
-    public Product(Integer productId, String productName, Integer price) {
-        this.productId = productId;
-        this.productName = productName;
-        this.price = price;
-    }
+	public Ranking(Integer id, String name, Integer score) {
+		this.id = id;
+		this.name = name;
+		this.score = score;
+	}
 
-    @Override
-    public String toString() {
-        return "Product [product_id=" + productId + ", user_name=" + productName + ", score=" + price + "]";
-    }
+	@Override
+	public String toString() {
+		return "Ranking [id=" + id + ", name=" + name + ", score=" + score + "]";
+	}
 
-    public Integer getProductId() {
-        return productId;
-    }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getProductName() {
-        return productName;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Integer getPrice() {
-        return price;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
+	public Integer getScore() {
+		return score;
+	}
 
-    // 全フィールドが未入力かの判断
-    public boolean isEmptyCondition() {
-        return productId == null && ParamUtil.isNullOrEmpty(productName) && price == null;
-    }
+	public void setScore(Integer score) {
+		this.score = score;
+	}
+
+	// 全フィールドが未入力かの判断
+	public boolean isEmptyCondition() {
+		return id == null && ParamUtil.isNullOrEmpty(name) && score == null;
+	}
 }
 

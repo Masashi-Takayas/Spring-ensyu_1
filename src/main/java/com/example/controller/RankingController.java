@@ -13,79 +13,125 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.example.controller.form.ProductForm;
-import com.example.entity.Product;
-import com.example.service.ProductService;
+import com.example.controller.form.LoginForm;
+import com.example.controller.form.RankingForm;
+import com.example.entity.Login;
+import com.example.entity.Ranking;
+import com.example.service.LoginService;
+import com.example.service.RankingService;
 
 /**
  * コントローラ
  */
 @Controller
-public class ProductController {
+public class RankingController {
 
-    /**
-     * メッセージリソース用
-     */
-    @Autowired
-    MessageSource messageSource;
+	/**
+	 * メッセージリソース用
+	 */
+	@Autowired
+	MessageSource messageSource;
 
-    /**
-     * productsテーブル用サービス
-     */
-    @Autowired
-    ProductService productService;
+	@Autowired
+	RankingService rankingService;
 
-    /**
-     * トップ画面表示
-     */
-    @RequestMapping("/top")
-    public String index(@ModelAttribute("product") ProductForm form, Model model) {
-        return "top";
-    }
+	@Autowired
+	LoginService loginService;
 
-    /**
-     * 検索結果画面遷移
-     */
-    @RequestMapping(value = "/execute", params = "search", method = RequestMethod.POST)
-    public String search(@Validated @ModelAttribute("product") ProductForm form, BindingResult bindingResult, Model model) {
-        Product product = new Product(form.getProductId(), form.getProductName(), form.getPrice());
+	/**
+	 * トップ画面表示
+	 */
+	@RequestMapping("/login")
+	public String index(@ModelAttribute("login") LoginForm form, Model model) {
+		return "login";
+	}
+	@RequestMapping(value = "/execute", params = "login", method = RequestMethod.POST)
+	public String search(@Validated @ModelAttribute("login") LoginForm form, BindingResult bindingResult,@ModelAttribute("ranking") RankingForm form2,Model model) {
+		if (bindingResult.hasErrors()) {
+			return "login";
+		}
 
-        List<Product> list = productService.find(product);
+		Login list = loginService.findIdAndPass(form.getLogin_id(),form.getPassword(),form.getName());
 
-        if (list.isEmpty()) {
-            // メッセージリソースファイルから、メッセージを取得
-            String errMsg = messageSource.getMessage("select.error", null, Locale.getDefault());
-            model.addAttribute("msg", errMsg);
+		if (list == null) {
+			// メッセージリソースファイルから、メッセージを取得
+			String errMsg = messageSource.getMessage("select.error", null, Locale.getDefault());
+			model.addAttribute("msg", errMsg);
 
-            return "top";
-        } else {
-            model.addAttribute("productList", list);
+			return "login";
+		} else {
+			
+			String name = list.getName();
+			model.addAttribute("name",name);
+			
+			return "top";
+		}
+	}
 
-            return "searchResult";
-        }
-    }
-    
-    @RequestMapping(value = "/main", params = "play", method = RequestMethod.POST)
-    public String play(@Validated @ModelAttribute("product") ProductForm form, BindingResult bindingResult, Model model) {
+	/**
+	 * 検索結果画面遷移
+	 */
+	@RequestMapping(value = "/execute", params = "search", method = RequestMethod.POST)
+	public String search(@ModelAttribute("ranking") RankingForm form,Model model) {
 
-            return "play";
-    }
-    
-    /**
-     * 登録完了画面遷移
-     */
-    @RequestMapping(value = "/execute", params = "insert", method = RequestMethod.POST)
-    public String insert(@Validated @ModelAttribute("product") ProductForm form, BindingResult bindingResult,
-            Model model) {
-        if (bindingResult.hasErrors()) {
-            return "top";
-        }
+		Ranking ranking = new Ranking(form.getId(), form.getName(), form.getScore());
+		List<Ranking> list = rankingService.findAll(ranking);
+		if (list.isEmpty()) {
+			// メッセージリソースファイルから、メッセージを取得
+			String errMsg = messageSource.getMessage("select.error", null, Locale.getDefault());
+			model.addAttribute("msg", errMsg);
 
-        Product product = new Product(form.getProductId(), form.getProductName(), form.getPrice());
+			return "top";
+		} else {
+			model.addAttribute("rankingList", list);
 
-        productService.insert(product);
+			return "searchResult";
+		}
+	}
 
-        return "insertResult";
-    }
+	/**
+	 * 登録完了画面遷移
+	 */
+	@RequestMapping(value = "/execute", params = "insert", method = RequestMethod.POST)
+	public String insert(@Validated @ModelAttribute("ranking") RankingForm form, BindingResult bindingResult,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			return "top";
+		}
+
+		Ranking ranking = new Ranking(form.getId(), form.getName(), form.getScore());
+
+		rankingService.insert(ranking);
+		
+		return "insertResult";
+	}
+
+	@RequestMapping(value = "/execute", params = "deleteResult", method = RequestMethod.POST)
+	public String deleteResult(@ModelAttribute("ranking") RankingForm form,Model model) {
+
+		Ranking ranking = new Ranking(form.getId(), form.getName(), form.getScore());
+
+		rankingService.delete(ranking);
+
+		return "deleteResult";
+	}
+
+	@RequestMapping(value = "/execute",params = "play",method = RequestMethod.POST )
+	public String play(@ModelAttribute("ranking") RankingForm form, Model model) {
+
+		return "play";
+	}
+
+	@RequestMapping(value = "/top")
+	public String top(@ModelAttribute("ranking") RankingForm form, Model model) {
+
+		return "top";
+	}
+
+	@RequestMapping(value = "/delete")
+	public String delete(@ModelAttribute("ranking") RankingForm form,Model model) {
+
+		return "delete";
+	}
 }
 
