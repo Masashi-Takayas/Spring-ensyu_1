@@ -9,7 +9,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
+
 <title>トップ</title>
+<link href="css/commons.css" rel="stylesheet">
 </head>
 <body>
 	<h2>ランキングに名前を登録してください</h2>

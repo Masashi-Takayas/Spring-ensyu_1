@@ -9,7 +9,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
 <title>削除</title>
+<link href="css/commons.css" rel="stylesheet">
 </head>
 <body>
 	<form:form action="execute" modelAttribute="ranking" method="post">

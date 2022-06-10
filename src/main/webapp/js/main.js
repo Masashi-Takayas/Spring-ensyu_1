@@ -152,5 +152,7 @@ function keyDown(event){
     var ck = event.keyCode;
 
     // Escキーが押されていたらフラグを降ろす
-    if(ck === 27){run = false;}
+    if(ck === 27){
+        run = false;
+    }
 }

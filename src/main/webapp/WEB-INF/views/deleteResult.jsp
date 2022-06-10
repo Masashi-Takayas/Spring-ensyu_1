@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
 <meta charset="UTF-8">
 <title>削除完了</title>
 </head>

@@ -7,7 +7,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
 <meta charset="UTF-8">
+<link href="css/commons.css" rel="stylesheet">
 <title>登録完了</title>
 </head>
 <body>

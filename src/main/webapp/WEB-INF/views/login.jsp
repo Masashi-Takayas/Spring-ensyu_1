@@ -8,9 +8,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
 <meta charset="UTF-8">
 <title>ログイン</title>
+<link href="css/commons.css" rel="stylesheet">
 </head>
+<link href="css/commons.css" rel="stylesheet">
 <body>
 	<h2>ログインしてください</h2>
 

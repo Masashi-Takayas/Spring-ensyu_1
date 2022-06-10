@@ -5,7 +5,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/commons.css">
 <title>プレイ</title>
+<link href="css/commons.css" rel="stylesheet">
 </head>
 
 <style>
