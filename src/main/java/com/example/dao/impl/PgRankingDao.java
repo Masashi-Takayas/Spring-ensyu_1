@@ -17,7 +17,7 @@ public class PgRankingDao implements RankingDao {
 
 	private static final String SELECT_ALL = "SELECT name,score FROM ranking ORDER BY score DESC";
 	private static final String INSERT = "INSERT INTO ranking(name, score) VALUES(:name, :score)";
-	private static final String DELETE = "DELETE FROM ranking WHERE rank_id = :id";
+	private static final String DELETE = "DELETE FROM ranking WHERE name = :name";
 
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -47,7 +47,7 @@ public class PgRankingDao implements RankingDao {
 		String sql = DELETE;
 
 		MapSqlParameterSource param = new MapSqlParameterSource();
-		param.addValue("id", ranking.getId());
+		param.addValue("name", ranking.getName());
 
 		jdbcTemplate.update(sql, param);
 	}

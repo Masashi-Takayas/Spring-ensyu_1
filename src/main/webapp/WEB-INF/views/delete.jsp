@@ -14,12 +14,15 @@
 <body>
 	<form:form action="execute" modelAttribute="ranking" method="post">
 
-    <fmt:message key="lbl.ranking.id" />
+    <fmt:message key="lbl.ranking.name" />
     <fmt:message key="lbl.separator" />
-    <form:input path="id" />
+    <form:input path="name" />
 
     <br>
-
+    <c:if test="${empty msg}">
+      <form:errors path="name" cssStyle="color: red" />
+    </c:if>
+    
     <form:button name="deleteResult">
       <fmt:message key="btn.delete" />
     </form:button>

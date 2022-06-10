@@ -17,7 +17,6 @@ canvas {
 
 	<h2>シューティング</h2>
 	<canvas id="screen"></canvas>
-	<p id="info"></p>
 
 	<script src="js/commons.js"></script>
 	<script src="js/character.js"></script>

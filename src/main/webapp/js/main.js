@@ -1,14 +1,17 @@
 // - global -------------------------------------------------------------------
 var screenCanvas, info;
 var run = true;
-var fps = 1000 / 30;
+var fps = 1000 / 60;
 var mouse = new Point();
 var ctx; // canvas2d コンテキスト格納用
-var fire = false;
+var fire = true;
+var counter = 0;
 
 var CHARA_COLOR = 'rgba(0,0,255,0.75)';
 var CHARA_SHOT_COLOR = 'rgba(0,255,0,0.75)';
-var CHARA_SHOT_MAX_COUNT = 10;
+var CHARA_SHOT_MAX_COUNT = 5000;
+var ENEMY_COLOR = 'rgba(255, 0, 0, 0.75)';
+var ENEMY_MAX_COUNT = 10;
 
 // - main ---------------------------------------------------------------------
 window.onload = function(){
@@ -23,7 +26,6 @@ window.onload = function(){
 
     // イベントの登録
     screenCanvas.addEventListener('mousemove', mouseMove, true);
-    screenCanvas.addEventListener('mousedown', mouseDown, true);
     window.addEventListener('keydown', keyDown, true);
 
     // その他のエレメント関連
@@ -31,49 +33,86 @@ window.onload = function(){
 
 	var chara = new Character();
     chara.init(10);
+
     var charaShot = new Array(CHARA_SHOT_MAX_COUNT);
-    for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+    for(i = 0; i < CHARA_SHOT_MAX_COUNT;i++){
         charaShot[i] = new CharacterShot();
+    }
+
+    var enemy = new Array(ENEMY_MAX_COUNT);
+    for(i = 0; i < ENEMY_MAX_COUNT; i++){
+        enemy[i] = new Enemy();
     }
 
     // レンダリング処理を呼び出す
     (function(){
-        // HTMLを更新
-        info.innerJSP = mouse.x + ' : ' + mouse.y;
 
-        // screenクリア 
-        ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
+    // screenクリア 
+    ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
 
-        // パスの設定を開始
-        ctx.beginPath();
-        
-        chara.position.x = mouse.x;
-        chara.position.y = mouse.y;
-
-        ctx.arc(
-			chara.position.x, 
-			chara.position.y, 
-			chara.size, 
-			0, Math.PI * 2, false
-		);
-
-        // 円の色を設定する
-        ctx.fillStyle = CHARA_COLOR;
-	    // 円を描く
-        ctx.fill();
-
-       // フラグにより再帰呼び出し
-       if(run){setTimeout(arguments.callee, fps);}   
-
-   })();
-
-    (function(){
     // パスの設定を開始
     ctx.beginPath();
+    
+    chara.position.x = mouse.x;
+    chara.position.y = mouse.y;
 
-    // すべての自機ショットを調査する
-    for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
-        // 自機ショットが既に発射されているかチェック
+    ctx.arc(
+        chara.position.x, 
+        chara.position.y, 
+        chara.size, 
+        0, Math.PI * 2, false
+    );
+    // 円の色を設定する
+    ctx.fillStyle = CHARA_COLOR;
+    // 円を描く
+    ctx.fill();
+   
+    //     // エネミーの出現管理 -------------------------------------------------
+    // // 100 フレームに一度出現させる
+    // if(counter % 100 === 0){
+    //     // すべてのエネミーを調査する
+    //     for(i = 0; i < ENEMY_MAX_COUNT; i++){
+    //         // エネミーの生存フラグをチェック
+    //         if(!enemy[i].alive){
+    //             // タイプを決定するパラメータを算出
+    //             j = (counter % 200) / 100;
+
+    //             // タイプに応じて初期位置を決める
+    //             var enemySize = 10;
+    //             p.x = -enemySize + (screenCanvas.width + enemySize * 2) * j;
+    //             p.y = screenCanvas.height / 2;
+
+    //             // エネミーを新規にセット
+    //             enemy[i].set(p, enemySize, j);
+
+    //             // 1体出現させたのでループを抜ける
+    //             break;
+    //         }
+    //     }
+    // }
+
+    // fireフラグの値により分岐
+    if(fire){
+        // すべての自機ショットを調査する
+        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+            
+            // 自機ショットが既に発射されているかチェック
+            if(!charaShot[i].alive){
+                
+            // 自機ショットを新規にセット
+            charaShot[i].set(chara.position, 5, 2);   
+            // ループを抜ける
+            break;
+            }
+        }
+    }
+
+        // パスの設定を開始
+    ctx.beginPath();
+
+   // すべての自機ショットを調査する
+   for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+    // 自機ショットが既に発射されているかチェック
         if(charaShot[i].alive){
             // 自機ショットを動かす
             charaShot[i].move();
@@ -89,30 +128,17 @@ window.onload = function(){
             // パスをいったん閉じる
             ctx.closePath();
         }
-    }
-    // fireフラグの値により分岐
-    if(fire){
-        // すべての自機ショットを調査する
-        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
-            // 自機ショットが既に発射されているかチェック
-            if(!charaShot[i].alive){
-                // 自機ショットを新規にセット
-                charaShot[i].set(chara.position, 3, 5);
-
-                // ループを抜ける
-                break;
-            }
-        }
-        // フラグを降ろしておく
-        fire = false;
-    }
-
+    }   
     // 自機ショットの色を設定する
     ctx.fillStyle = CHARA_SHOT_COLOR;
 
     // 自機ショットを描く
     ctx.fill();
-    })();        
+
+    // フラグにより再帰呼び出し
+    if(run){setTimeout(arguments.callee, fps);}   
+
+   })();
 }
 
 // - event --------------------------------------------------------------------
@@ -120,10 +146,6 @@ function mouseMove(event){
     // マウスカーソル座標の更新
     mouse.x = event.clientX - screenCanvas.offsetLeft;
     mouse.y = event.clientY - screenCanvas.offsetTop;
-}
-function mouseDown(event){
-    event.mouseDown;
-    fire = true;
 }
 function keyDown(event){
     // キーコードを取得
